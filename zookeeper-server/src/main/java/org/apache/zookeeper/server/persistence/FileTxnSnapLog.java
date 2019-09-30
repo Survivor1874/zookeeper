@@ -64,8 +64,7 @@ public class FileTxnSnapLog {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileTxnSnapLog.class);
 
-    public static final String ZOOKEEPER_DATADIR_AUTOCREATE =
-            "zookeeper.datadir.autocreate";
+    public static final String ZOOKEEPER_DATADIR_AUTOCREATE = "zookeeper.datadir.autocreate";
 
     public static final String ZOOKEEPER_DATADIR_AUTOCREATE_DEFAULT = "true";
 
@@ -98,9 +97,7 @@ public class FileTxnSnapLog {
 
         // by default create snap/log dirs, but otherwise complain instead
         // See ZOOKEEPER-1161 for more details
-        boolean enableAutocreate = Boolean.valueOf(
-                System.getProperty(ZOOKEEPER_DATADIR_AUTOCREATE,
-                        ZOOKEEPER_DATADIR_AUTOCREATE_DEFAULT));
+        boolean enableAutocreate = Boolean.valueOf(System.getProperty(ZOOKEEPER_DATADIR_AUTOCREATE, ZOOKEEPER_DATADIR_AUTOCREATE_DEFAULT));
 
         if (!this.dataDir.exists()) {
             if (!enableAutocreate) {
@@ -112,8 +109,7 @@ public class FileTxnSnapLog {
             }
 
             if (!this.dataDir.mkdirs()) {
-                throw new DatadirException("Unable to create data directory "
-                        + this.dataDir);
+                throw new DatadirException("Unable to create data directory " + this.dataDir);
             }
         }
         if (!this.dataDir.canWrite()) {

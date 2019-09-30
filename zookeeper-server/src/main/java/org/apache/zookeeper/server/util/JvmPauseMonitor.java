@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -132,7 +132,7 @@ public class JvmPauseMonitor {
         }
 
         String ret = String.format("Detected pause in JVM or host machine (eg GC): pause of approximately %d ms, " +
-                "total pause: info level: %d, warn level: %d %n",
+                        "total pause: info level: %d, warn level: %d %n",
                 extraSleepTime, numGcInfoThresholdExceeded, numGcWarnThresholdExceeded);
         if (gcDiffs.isEmpty()) {
             ret += ("No GCs detected");
@@ -171,18 +171,22 @@ public class JvmPauseMonitor {
                     this.gcTimeMillis - other.gcTimeMillis);
         }
 
+        @Override
         public String toString() {
             return "count=" + gcCount + " time=" + gcTimeMillis + "ms";
         }
 
     }
 
+    /**
+     * jvm 监视器 ？
+     */
     private class JVMMonitor implements Runnable {
+
         @Override
         public void run() {
             Map<String, GcTimes> gcTimesBeforeSleep = getGcTimes();
-            LOG.info("Starting JVM Pause Monitor with infoThresholdMs:{} warnThresholdMs:{} and sleepTimeMs:{}",
-                    infoThresholdMs, warnThresholdMs, sleepTimeMs);
+            LOG.info("Starting JVM Pause Monitor with infoThresholdMs:{} warnThresholdMs:{} and sleepTimeMs:{}", infoThresholdMs, warnThresholdMs, sleepTimeMs);
             while (shouldRun) {
                 long startTime = Instant.now().toEpochMilli();
                 try {

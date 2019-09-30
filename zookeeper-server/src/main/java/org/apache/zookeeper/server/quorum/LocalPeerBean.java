@@ -34,6 +34,7 @@ public class LocalPeerBean extends ServerBean implements LocalPeerMXBean {
         return "replica." + peer.getId();
     }
 
+    @Override
     public boolean isHidden() {
         return false;
     }

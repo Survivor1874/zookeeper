@@ -838,6 +838,7 @@ public class AuthFastLeaderElection implements Election {
      * 
      * @throws InterruptedException
      */
+    @Override
     public Vote lookForLeader() throws InterruptedException {
         try {
             self.jmxLeaderElectionBean = new LeaderElectionBean();

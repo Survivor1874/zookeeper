@@ -143,6 +143,7 @@ public abstract class ServerCnxnFactory {
     public abstract void start();
 
     protected ZooKeeperServer zkServer;
+
     final public void setZooKeeperServer(ZooKeeperServer zks) {
         this.zkServer = zks;
         if (zks != null) {
@@ -157,8 +158,8 @@ public abstract class ServerCnxnFactory {
     public abstract void closeAll();
     
     static public ServerCnxnFactory createFactory() throws IOException {
-        String serverCnxnFactoryName =
-            System.getProperty(ZOOKEEPER_SERVER_CNXN_FACTORY);
+        String serverCnxnFactoryName = System.getProperty(ZOOKEEPER_SERVER_CNXN_FACTORY);
+
         if (serverCnxnFactoryName == null) {
             serverCnxnFactoryName = NIOServerCnxnFactory.class.getName();
         }

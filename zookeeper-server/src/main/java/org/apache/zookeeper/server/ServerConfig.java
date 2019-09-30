@@ -97,6 +97,7 @@ public class ServerConfig {
 
         // let qpconfig parse the file and then pull the stuff we are
         // interested in
+        // config set 到 ServerConfig
         readFrom(config);
     }
 

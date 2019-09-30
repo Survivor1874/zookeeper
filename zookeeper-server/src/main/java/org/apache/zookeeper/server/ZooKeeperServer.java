@@ -207,9 +207,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
      * actually start listening for clients until run() is invoked.
      *
      */
-    public ZooKeeperServer(FileTxnSnapLog txnLogFactory, int tickTime,
-            int minSessionTimeout, int maxSessionTimeout, int clientPortListenBacklog,
-            ZKDatabase zkDb, String initialConfig) {
+    public ZooKeeperServer(
+            FileTxnSnapLog txnLogFactory,
+            int tickTime,
+            int minSessionTimeout,
+            int maxSessionTimeout,
+            int clientPortListenBacklog,
+            ZKDatabase zkDb,
+            String initialConfig) {
         serverStats = new ServerStats(this);
         this.txnLogFactory = txnLogFactory;
         this.txnLogFactory.setServerStats(this.serverStats);
@@ -245,9 +250,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
      * {@link #ZooKeeperServer(FileTxnSnapLog, int, int, int, int, ZKDatabase, String)}
      *
      */
-    public ZooKeeperServer(JvmPauseMonitor jvmPauseMonitor, FileTxnSnapLog txnLogFactory, int tickTime,
-                           int minSessionTimeout, int maxSessionTimeout, int clientPortListenBacklog,
-                           ZKDatabase zkDb, String initialConfig) {
+    public ZooKeeperServer(JvmPauseMonitor jvmPauseMonitor,
+                           FileTxnSnapLog txnLogFactory,
+                           int tickTime,
+                           int minSessionTimeout,
+                           int maxSessionTimeout,
+                           int clientPortListenBacklog,
+                           ZKDatabase zkDb,
+                           String initialConfig) {
         this(txnLogFactory, tickTime, minSessionTimeout, maxSessionTimeout, clientPortListenBacklog, zkDb, initialConfig);
         this.jvmPauseMonitor = jvmPauseMonitor;
         if(jvmPauseMonitor != null) {
@@ -493,6 +503,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         }
     }
 
+    @Override
     public void expire(Session session) {
         long sessionId = session.getSessionId();
         LOG.info("Expiring session 0x" + Long.toHexString(sessionId)
@@ -540,8 +551,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         }
     }
 
-    public void startdata()
-    throws IOException, InterruptedException {
+    public void startdata() throws IOException, InterruptedException {
         //check to see if zkDb is not null
         if (zkDb == null) {
             zkDb = new ZKDatabase(this.txnLogFactory);
@@ -552,10 +562,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     }
 
     public synchronized void startup() {
+
         if (sessionTracker == null) {
             createSessionTracker();
         }
+
+        // 循环检查 session
         startSessionTracker();
+
         setupRequestProcessors();
 
         registerJMX();
@@ -576,8 +590,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
 
     protected void setupRequestProcessors() {
         RequestProcessor finalProcessor = new FinalRequestProcessor(this);
-        RequestProcessor syncProcessor = new SyncRequestProcessor(this,
-                finalProcessor);
+        RequestProcessor syncProcessor = new SyncRequestProcessor(this, finalProcessor);
         ((SyncRequestProcessor)syncProcessor).start();
         firstProcessor = new PrepRequestProcessor(this, syncProcessor);
         ((PrepRequestProcessor)firstProcessor).start();
@@ -598,8 +611,12 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     }
 
     protected void createSessionTracker() {
-        sessionTracker = new SessionTrackerImpl(this, zkDb.getSessionWithTimeOuts(),
-                tickTime, createSessionTrackerServerId, getZooKeeperServerListener());
+        sessionTracker = new SessionTrackerImpl(
+                this,
+                zkDb.getSessionWithTimeOuts(),
+                tickTime,
+                createSessionTrackerServerId,
+                getZooKeeperServerListener());
     }
 
     protected void startSessionTracker() {

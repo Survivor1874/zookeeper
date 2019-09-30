@@ -43,6 +43,7 @@ public class SimpleCounter extends Metric
         counter.set(0);
     }
 
+    @Override
     public long get() {
         return counter.get();
     }

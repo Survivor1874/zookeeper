@@ -104,13 +104,9 @@ public class JettyAdminServer implements AdminServer {
         } catch (Exception e) {
             // Server.start() only throws Exception, so let's at least wrap it
             // in an identifiable subclass
-            throw new AdminServerException(String.format(
-                    "Problem starting AdminServer on address %s,"
-                            + " port %d and command URL %s", address, port,
-                    commandUrl), e);
+            throw new AdminServerException(String.format("Problem starting AdminServer on address %s," + " port %d and command URL %s", address, port, commandUrl), e);
         }
-        LOG.info(String.format("Started AdminServer on address %s, port %d"
-                + " and command URL %s", address, port, commandUrl));
+        LOG.info(String.format("Started AdminServer on address %s, port %d" + " and command URL %s", address, port, commandUrl));
     }
 
     /**

@@ -28,6 +28,7 @@ import org.apache.zookeeper.jmx.ZKMBeanInfo;
 public abstract class ServerBean implements ServerMXBean, ZKMBeanInfo {
     private final Date startTime=new Date();
     
+    @Override
     public boolean isHidden() {
         return false;
     }

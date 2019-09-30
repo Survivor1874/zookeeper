@@ -82,6 +82,7 @@ public class ConnectionBean implements ConnectionMXBean, ZKMBeanInfo {
                 getSessionId());
     }
     
+    @Override
     public boolean isHidden() {
         return false;
     }

@@ -50,6 +50,7 @@ public class DataTreeBean implements DataTreeMXBean, ZKMBeanInfo {
         return "InMemoryDataTree";
     }
 
+    @Override
     public boolean isHidden() {
         return false;
     }

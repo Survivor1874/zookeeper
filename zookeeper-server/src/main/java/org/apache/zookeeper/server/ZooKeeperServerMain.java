@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,11 +45,10 @@ import org.slf4j.LoggerFactory;
  */
 @InterfaceAudience.Public
 public class ZooKeeperServerMain {
-    private static final Logger LOG =
-        LoggerFactory.getLogger(ZooKeeperServerMain.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ZooKeeperServerMain.class);
 
     private static final String USAGE =
-        "Usage: ZooKeeperServerMain configfile | port datadir [ticktime] [maxcnxns]";
+            "Usage: ZooKeeperServerMain configfile | port datadir [ticktime] [maxcnxns]";
 
     // ZooKeeper server supports two kinds of connection: unencrypted and encrypted.
     private ServerCnxnFactory cnxnFactory;
@@ -92,9 +91,7 @@ public class ZooKeeperServerMain {
         System.exit(ExitCode.EXECUTION_FINISHED.getValue());
     }
 
-    protected void initializeAndRun(String[] args)
-        throws ConfigException, IOException, AdminServerException
-    {
+    protected void initializeAndRun(String[] args) throws ConfigException, IOException, AdminServerException {
         try {
             ManagedUtil.registerLog4jMBeans();
         } catch (JMException e) {
@@ -113,43 +110,47 @@ public class ZooKeeperServerMain {
 
     /**
      * Run from a ServerConfig.
+     *
      * @param config ServerConfig to use.
      * @throws IOException
      * @throws AdminServerException
      */
-    public void runFromConfig(ServerConfig config)
-            throws IOException, AdminServerException {
+    public void runFromConfig(ServerConfig config) throws IOException, AdminServerException {
         LOG.info("Starting server");
         FileTxnSnapLog txnLog = null;
         try {
             try {
-                metricsProvider = MetricsProviderBootstrap
-                        .startMetricsProvider(config.getMetricsProviderClassName(),
-                                              config.getMetricsProviderConfiguration());
+                metricsProvider = MetricsProviderBootstrap.startMetricsProvider(config.getMetricsProviderClassName(), config.getMetricsProviderConfiguration());
             } catch (MetricsProviderLifeCycleException error) {
-                throw new IOException("Cannot boot MetricsProvider "+config.getMetricsProviderClassName(),
-                    error);
+                throw new IOException("Cannot boot MetricsProvider " + config.getMetricsProviderClassName(), error);
             }
+
             ServerMetrics.metricsProviderInitialized(metricsProvider);
+
             // Note that this thread isn't going to be doing anything else,
             // so rather than spawning another thread, we will just call
             // run() in this thread.
             // create a file logger url from the command line args
             txnLog = new FileTxnSnapLog(config.dataLogDir, config.dataDir);
             JvmPauseMonitor jvmPauseMonitor = null;
-            if(config.jvmPauseMonitorToRun) {
+            if (config.jvmPauseMonitorToRun) {
                 jvmPauseMonitor = new JvmPauseMonitor(config);
             }
-            final ZooKeeperServer zkServer = new ZooKeeperServer(jvmPauseMonitor, txnLog,
-                    config.tickTime, config.minSessionTimeout, config.maxSessionTimeout,
-                    config.listenBacklog, null, config.initialConfig);
+            final ZooKeeperServer zkServer = new ZooKeeperServer(
+                    jvmPauseMonitor,
+                    txnLog,
+                    config.tickTime,
+                    config.minSessionTimeout,
+                    config.maxSessionTimeout,
+                    config.listenBacklog,
+                    null,
+                    config.initialConfig);
             txnLog.setServerStats(zkServer.serverStats());
 
             // Registers shutdown handler which will be used to know the
             // server error or shutdown state changes.
             final CountDownLatch shutdownLatch = new CountDownLatch(1);
-            zkServer.registerServerShutdownHandler(
-                    new ZooKeeperServerShutdownHandler(shutdownLatch));
+            zkServer.registerServerShutdownHandler(new ZooKeeperServerShutdownHandler(shutdownLatch));
 
             // Start Admin server
             adminServer = AdminServerFactory.createAdminServer();
@@ -159,8 +160,11 @@ public class ZooKeeperServerMain {
             boolean needStartZKServer = true;
             if (config.getClientPortAddress() != null) {
                 cnxnFactory = ServerCnxnFactory.createFactory();
-                cnxnFactory.configure(config.getClientPortAddress(), config.getMaxClientCnxns(),
-                    config.getClientPortListenBacklog(), false);
+                cnxnFactory.configure(
+                        config.getClientPortAddress(),
+                        config.getMaxClientCnxns(),
+                        config.getClientPortListenBacklog(),
+                        false);
                 cnxnFactory.startup(zkServer);
                 // zkServer has been started. So we don't need to start it again in secureCnxnFactory.
                 needStartZKServer = false;
@@ -168,7 +172,7 @@ public class ZooKeeperServerMain {
             if (config.getSecureClientPortAddress() != null) {
                 secureCnxnFactory = ServerCnxnFactory.createFactory();
                 secureCnxnFactory.configure(config.getSecureClientPortAddress(), config.getMaxClientCnxns(),
-                    config.getClientPortListenBacklog(), true);
+                        config.getClientPortListenBacklog(), true);
                 secureCnxnFactory.startup(zkServer, needStartZKServer);
             }
 

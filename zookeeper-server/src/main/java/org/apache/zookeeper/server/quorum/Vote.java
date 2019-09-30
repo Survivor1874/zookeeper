@@ -33,9 +33,7 @@ public class Vote {
         this.state = ServerState.LOOKING;
     }
     
-    public Vote(long id,
-                    long zxid,
-                    long peerEpoch) {
+    public Vote(long id, long zxid, long peerEpoch) {
         this.version = 0x0;
         this.id = id;
         this.zxid = zxid;

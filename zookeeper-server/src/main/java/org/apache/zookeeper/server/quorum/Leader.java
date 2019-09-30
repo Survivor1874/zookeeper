@@ -520,8 +520,7 @@ public class Leader implements LearnerMaster {
         long electionTimeTaken = self.end_fle - self.start_fle;
         self.setElectionTimeTaken(electionTimeTaken);
         ServerMetrics.getMetrics().ELECTION_TIME.add(electionTimeTaken);
-        LOG.info("LEADING - LEADER ELECTION TOOK - {} {}", electionTimeTaken,
-                QuorumPeer.FLE_TIME_UNIT);
+        LOG.info("LEADING - LEADER ELECTION TOOK - {} {}", electionTimeTaken, QuorumPeer.FLE_TIME_UNIT);
         self.start_fle = 0;
         self.end_fle = 0;
 
@@ -760,8 +759,7 @@ public class Leader implements LearnerMaster {
             zk.shutdown();
         }
         synchronized (learners) {
-            for (Iterator<LearnerHandler> it = learners.iterator(); it
-                    .hasNext();) {
+            for (Iterator<LearnerHandler> it = learners.iterator(); it.hasNext();) {
                 LearnerHandler f = it.next();
                 it.remove();
                 f.shutdown();

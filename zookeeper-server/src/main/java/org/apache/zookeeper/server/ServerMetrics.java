@@ -36,14 +36,12 @@ public final class ServerMetrics {
     /**
      * Dummy instance useful for tests.
      */
-    public static final ServerMetrics NULL_METRICS
-            = new ServerMetrics(NullMetricsProvider.INSTANCE);
+    public static final ServerMetrics NULL_METRICS = new ServerMetrics(NullMetricsProvider.INSTANCE);
 
     /**
      * Dummy instance useful for tests.
      */
-    public static final ServerMetrics DEFAULT_METRICS_FOR_TESTS
-            = new ServerMetrics(new DefaultMetricsProvider());
+    public static final ServerMetrics DEFAULT_METRICS_FOR_TESTS = new ServerMetrics(new DefaultMetricsProvider());
 
     /**
      * Real instance used for tracking server side metrics. The final value is
@@ -70,7 +68,6 @@ public final class ServerMetrics {
         MetricsContext metricsContext = this.metricsProvider.getRootContext();
 
         FSYNC_TIME = metricsContext.getSummary("fsynctime", DetailLevel.BASIC);
-
         SNAPSHOT_TIME = metricsContext.getSummary("snapshottime", DetailLevel.BASIC);
         DB_INIT_TIME = metricsContext.getSummary("dbinittime", DetailLevel.BASIC);
         READ_LATENCY = metricsContext.getSummary("readlatency", DetailLevel.ADVANCED);
@@ -85,13 +82,10 @@ public final class ServerMetrics {
         CONNECTION_REQUEST_COUNT = metricsContext.getCounter("connection_request_count");
         CONNECTION_TOKEN_DEFICIT = metricsContext.getSummary("connection_token_deficit", DetailLevel.BASIC);
         CONNECTION_REJECTED = metricsContext.getCounter("connection_rejected");
-
         WRITE_PER_NAMESPACE = metricsContext.getSummarySet("write_per_namespace", DetailLevel.BASIC);
         READ_PER_NAMESPACE = metricsContext.getSummarySet("read_per_namespace", DetailLevel.BASIC);
-
         BYTES_RECEIVED_COUNT = metricsContext.getCounter("bytes_received_count");
         UNRECOVERABLE_ERROR_COUNT = metricsContext.getCounter("unrecoverable_error_count");
-
         NODE_CREATED_WATCHER = metricsContext.getSummary("node_created_watch_count", DetailLevel.BASIC);
         NODE_DELETED_WATCHER = metricsContext.getSummary("node_deleted_watch_count", DetailLevel.BASIC);
         NODE_CHANGED_WATCHER = metricsContext.getSummary("node_changed_watch_count", DetailLevel.BASIC);

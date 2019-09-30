@@ -92,10 +92,13 @@ public class SessionTrackerImpl extends ZooKeeperCriticalThread implements
 
     private final SessionExpirer expirer;
 
-    public SessionTrackerImpl(SessionExpirer expirer,
-            ConcurrentMap<Long, Integer> sessionsWithTimeout, int tickTime,
-            long serverId, ZooKeeperServerListener listener)
-    {
+    public SessionTrackerImpl(
+            SessionExpirer expirer,
+            ConcurrentMap<Long, Integer> sessionsWithTimeout,
+            int tickTime,
+            long serverId,
+            ZooKeeperServerListener listener) {
+
         super("SessionTracker", listener);
         this.expirer = expirer;
         this.sessionExpiryQueue = new ExpiryQueue<SessionImpl>(tickTime);
@@ -209,6 +212,7 @@ public class SessionTrackerImpl extends ZooKeeperCriticalThread implements
         return sessionsWithTimeout.get(sessionId);
     }
 
+    @Override
     synchronized public void setSessionClosing(long sessionId) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Session closing: 0x" + Long.toHexString(sessionId));

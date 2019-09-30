@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,20 +36,18 @@ import org.slf4j.LoggerFactory;
  * threads, which it does by creating N separate single thread ExecutorServices,
  * or non-assignable threads, which it does by creating a single N-thread
  * ExecutorService.
- *   - NIOServerCnxnFactory uses a non-assignable WorkerService because the
- *     socket IO requests are order independent and allowing the
- *     ExecutorService to handle thread assignment gives optimal performance.
- *   - CommitProcessor uses an assignable WorkerService because requests for
- *     a given session must be processed in order.
+ * - NIOServerCnxnFactory uses a non-assignable WorkerService because the
+ * socket IO requests are order independent and allowing the
+ * ExecutorService to handle thread assignment gives optimal performance.
+ * - CommitProcessor uses an assignable WorkerService because requests for
+ * a given session must be processed in order.
  * ExecutorService provides queue management and thread restarting, so it's
  * useful even with a single thread.
  */
 public class WorkerService {
-    private static final Logger LOG =
-        LoggerFactory.getLogger(WorkerService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WorkerService.class);
 
-    private final ArrayList<ExecutorService> workers =
-        new ArrayList<ExecutorService>();
+    private final ArrayList<ExecutorService> workers = new ArrayList<ExecutorService>();
 
     private final String threadNamePrefix;
     private int numWorkerThreads;
@@ -59,15 +57,14 @@ public class WorkerService {
     private volatile boolean stopped = true;
 
     /**
-     * @param name                  worker threads are named &lt;name&gt;Thread-##
-     * @param numThreads            number of worker threads (0 - N)
-     *                              If 0, scheduled work is run immediately by
-     *                              the calling thread.
-     * @param useAssignableThreads  whether the worker threads should be
-     *                              individually assignable or not
+     * @param name                 worker threads are named &lt;name&gt;Thread-##
+     * @param numThreads           number of worker threads (0 - N)
+     *                             If 0, scheduled work is run immediately by
+     *                             the calling thread.
+     * @param useAssignableThreads whether the worker threads should be
+     *                             individually assignable or not
      */
-    public WorkerService(String name, int numThreads,
-                         boolean useAssignableThreads) {
+    public WorkerService(String name, int numThreads, boolean useAssignableThreads) {
         this.threadNamePrefix = (name == null ? "" : name) + "Thread";
         this.numWorkerThreads = numThreads;
         this.threadsAreAssignable = useAssignableThreads;
@@ -115,7 +112,7 @@ public class WorkerService {
         }
 
         ScheduledWorkRequest scheduledWorkRequest =
-            new ScheduledWorkRequest(workRequest);
+                new ScheduledWorkRequest(workRequest);
 
         // If we have a worker thread pool, use that; otherwise, do the work
         // directly.
@@ -178,15 +175,15 @@ public class WorkerService {
         DaemonThreadFactory(String name, int firstThreadNum) {
             threadNumber.set(firstThreadNum);
             SecurityManager s = System.getSecurityManager();
-            group = (s != null)? s.getThreadGroup() :
-                                 Thread.currentThread().getThreadGroup();
+            group = (s != null) ? s.getThreadGroup() :
+                    Thread.currentThread().getThreadGroup();
             namePrefix = name + "-";
         }
 
         public Thread newThread(Runnable r) {
             Thread t = new Thread(group, r,
-                                  namePrefix + threadNumber.getAndIncrement(),
-                                  0);
+                    namePrefix + threadNumber.getAndIncrement(),
+                    0);
             if (!t.isDaemon())
                 t.setDaemon(true);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -198,13 +195,11 @@ public class WorkerService {
     public void start() {
         if (numWorkerThreads > 0) {
             if (threadsAreAssignable) {
-                for(int i = 1; i <= numWorkerThreads; ++i) {
-                    workers.add(Executors.newFixedThreadPool(
-                        1, new DaemonThreadFactory(threadNamePrefix, i)));
+                for (int i = 1; i <= numWorkerThreads; ++i) {
+                    workers.add(Executors.newFixedThreadPool(1, new DaemonThreadFactory(threadNamePrefix, i)));
                 }
             } else {
-                workers.add(Executors.newFixedThreadPool(
-                    numWorkerThreads, new DaemonThreadFactory(threadNamePrefix)));
+                workers.add(Executors.newFixedThreadPool(numWorkerThreads, new DaemonThreadFactory(threadNamePrefix)));
             }
         }
         stopped = false;
@@ -214,7 +209,7 @@ public class WorkerService {
         stopped = true;
 
         // Signal for graceful shutdown
-        for(ExecutorService worker : workers) {
+        for (ExecutorService worker : workers) {
             worker.shutdown();
         }
     }
@@ -223,12 +218,12 @@ public class WorkerService {
         // Give the worker threads time to finish executing
         long now = Time.currentElapsedTime();
         long endTime = now + shutdownTimeoutMS;
-        for(ExecutorService worker : workers) {
+        for (ExecutorService worker : workers) {
             boolean terminated = false;
             while ((now = Time.currentElapsedTime()) <= endTime) {
                 try {
                     terminated = worker.awaitTermination(
-                        endTime - now, TimeUnit.MILLISECONDS);
+                            endTime - now, TimeUnit.MILLISECONDS);
                     break;
                 } catch (InterruptedException e) {
                     // ignore

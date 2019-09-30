@@ -41,8 +41,12 @@ public final class VerifyingFileFactory {
     }
 
     public File validate(File file) {
-        if(warnForRelativePath) doWarnForRelativePath(file);
-        if(failForNonExistingPath) doFailForNonExistingPath(file);
+        if(warnForRelativePath) {
+            doWarnForRelativePath(file);
+        }
+        if(failForNonExistingPath) {
+            doFailForNonExistingPath(file);
+        }
         return file;
     }
 
@@ -54,8 +58,12 @@ public final class VerifyingFileFactory {
     }
 
     private void doWarnForRelativePath(File file) {
-        if(file.isAbsolute()) return;
-        if(file.getPath().substring(0, 2).equals("."+File.separator)) return;
+        if(file.isAbsolute()) {
+            return;
+        }
+        if(file.getPath().substring(0, 2).equals("."+File.separator)) {
+            return;
+        }
         log.warn(file.getPath()+" is relative. Prepend ."
                 +File.separator+" to indicate that you're sure!");
     }

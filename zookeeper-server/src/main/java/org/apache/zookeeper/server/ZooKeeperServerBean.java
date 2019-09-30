@@ -47,6 +47,7 @@ public class ZooKeeperServerBean implements ZooKeeperServerMXBean, ZKMBeanInfo {
         return name;
     }
     
+    @Override
     public boolean isHidden() {
         return false;
     }

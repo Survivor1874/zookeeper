@@ -38,6 +38,8 @@ public interface QuorumVerifier {
     Map<Long, QuorumServer> getAllMembers();
     Map<Long, QuorumServer> getVotingMembers();
     Map<Long, QuorumServer> getObservingMembers();
+    @Override
     boolean equals(Object o);
+    @Override
     String toString();
 }

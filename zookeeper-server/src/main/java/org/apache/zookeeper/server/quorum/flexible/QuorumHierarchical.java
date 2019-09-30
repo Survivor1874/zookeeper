@@ -86,6 +86,7 @@ public class QuorumHierarchical implements QuorumVerifier {
          return 42; // any arbitrary constant will do 
     }
     
+   @Override
    public boolean equals(Object o){
        if (!(o instanceof QuorumHierarchical)) {
            return false;           
@@ -141,6 +142,7 @@ public class QuorumHierarchical implements QuorumVerifier {
      * 
      * @param id
      */
+    @Override
     public long getWeight(long id){
         return serverWeight.get(id);
     }
@@ -238,9 +240,11 @@ public class QuorumHierarchical implements QuorumVerifier {
         computeGroupWeight();
     }
     
-    public Map<Long, QuorumServer> getAllMembers() { 
+    @Override
+    public Map<Long, QuorumServer> getAllMembers() {
        return allMembers;
     }
+    @Override
     public String toString(){
        StringWriter sw = new StringWriter();
        
@@ -321,6 +325,7 @@ public class QuorumHierarchical implements QuorumVerifier {
     /**
      * Verifies if a given set is a quorum.
      */
+    @Override
     public boolean containsQuorum(Set<Long> set){
         HashMap<Long, Long> expansion = new HashMap<Long, Long>();
         
@@ -361,18 +366,22 @@ public class QuorumHierarchical implements QuorumVerifier {
             return false;
         }
     }
+    @Override
     public Map<Long, QuorumServer> getVotingMembers() {
        return participatingMembers;
    }
 
+   @Override
    public Map<Long, QuorumServer> getObservingMembers() {
        return observingMembers;
    }
 
+   @Override
    public long getVersion() {
        return version;
    }          
 
+   @Override
    public void setVersion(long ver) {
        version = ver;
    }
